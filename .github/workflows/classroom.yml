@@ -1,0 +1,127 @@
+name: GitHub Classroom Workflow
+
+on: [push, pull_request]
+    
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-18.04
+    timeout-minutes: 10
+    steps:
+      - uses: bazelbuild/setup-bazelisk@v2
+      - uses: actions/checkout@v2
+      - name: Checkout grader
+        uses: actions/checkout@master
+        with:
+            repository: 'ee538/Summer22_Project_Grader'
+            path: 'coding_grader'
+      - name: Checkout code & Setup
+        run: |
+             cp src/lib/trojanmap.cc src/lib/trojanmap.h coding_grader
+             rm -rf grades
+             mkdir grades
+             ls
+             echo "here1"
+             ls coding_grader
+      
+      - name: Phase 1, Item 1
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader1 2>&1 | tee Q1res.txt
+             grep "OK" Q1res.txt > Q1res_.txt
+
+      - name: Phase 1, Item 2-1
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader2.1 2>&1 | tee Q2.1res.txt
+             grep "OK" Q2.1res.txt > Q2.1res_.txt
+             
+      - name: Phase 2, Item 2-2
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader2.2 2>&1 | tee Q2.2res.txt
+             grep "OK" Q2.2res.txt > Q2.2res_.txt
+             
+      - name: Phase 2, Item 6
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader6 2>&1 | tee Q6res.txt
+             grep "OK" Q6res.txt > Q6res_.txt
+             
+      - name: Phase 2, Item 7
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader7 2>&1 | tee Q7res.txt
+             grep "OK" Q7res.txt > Q7res_.txt
+             
+      - name: Phase 2, Item 8
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader8 2>&1 | tee Q8res.txt
+             grep "OK" Q8res.txt > Q8res_.txt
+
+      - name: Phase 3, Item 9
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader9 2>&1 | tee Q9res.txt
+             grep "OK" Q9res.txt > Q9res_.txt
+
+      - name: Phase 3, Item 10
+        if: always()
+        run: |
+             echo "--------- grader test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr coding_grader/trojanmap_test_grader10 2>&1 | tee Q10res.txt
+             grep "OK" Q10res.txt > Q10res_.txt
+             
+      - name: Your unit tests
+        if: always()
+        run: |
+             echo "--------- student test ---------"
+             bazel run --ui_event_filters=-info,-stdout,-stderr tests/trojanmap_test_student 2>&1 | tee ST_Qres.txt
+
+      - name: Organize scores
+        if: always()
+        run: |
+             rm -rf scores
+             mkdir scores
+             mv Q*res.txt Q*res_.txt grades
+             python coding_grader/coding_grades_total_ph1.py 2>&1 | tee scores/Scores_phase1.txt
+
+             python coding_grader/coding_grades_total_ph2.py 2>&1 | tee scores/Scores_phase2.txt
+
+             python coding_grader/coding_grades_total_ph3.py 2>&1 | tee scores/Scores_phase3.txt
+             
+             # clean temporary files
+             rm -rf grades
+             rm -rf ST_*
+             rm -rf coding_grader
+             
+             git config --global user.email "autograder@github.com"
+             git config --global user.name "autograder"
+             
+             git add scores/Scores_phase1.txt
+             if [ -n "$(git status --porcelain)" ]; then
+                git commit -m "Update autograding (phase 1)"
+                git push origin HEAD:main -f
+             fi
+
+             git add scores/Scores_phase2.txt
+             if [ -n "$(git status --porcelain)" ]; then
+                git commit -m "Update autograding (phase 2)"
+                git push origin HEAD:main -f
+             fi
+
+             git add scores/Scores_phase3.txt
+             if [ -n "$(git status --porcelain)" ]; then
+                git commit -m "Update autograding (phase 3)"
+                git push origin HEAD:main -f
+             fi
+             
+             
