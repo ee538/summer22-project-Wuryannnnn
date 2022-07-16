@@ -102,6 +102,10 @@ void MapUI::PrintMenu() {
         "**************************************************************\n";
     std::cout << menu << std::endl;
     // fill in here  
+    std::vector<std::string> cate = map.GetAllCategories();
+    for(auto i : cate){
+      std::cout << i << std::endl;
+    }
     PrintMenu();
     break;
   }
@@ -113,6 +117,12 @@ void MapUI::PrintMenu() {
         "**************************************************************\n";
     std::cout << menu << std::endl;
     // fill in here 
+    std::cout << "Please enter your catergory:  ";
+    getline(std::cin, input);
+    std::vector<std::pair<double, double>> cake = map.GetAllLocationsFromCategory(input);
+    for(auto i : cake){
+      std::cout << "lat:  " <<i.first << ' ' << "lon:  " << i.second << std::endl;
+    }
     PrintMenu();
     break;
   }
@@ -124,6 +134,22 @@ void MapUI::PrintMenu() {
         "**************************************************************\n";
     std::cout << menu << std::endl;
     // fill in here
+    std::cout << "Please enter your regex:  ";
+    getline(std::cin, input);
+    try {
+    std::regex location(input);
+    std::vector<std::pair<double, double>> cup = map.GetLocationRegex(location);
+    if(cup.size() == 0){
+      std::cout << "not found" << std::endl;
+    }
+    for(auto i : cup){
+      std::cout << "lat:  " <<i.first << ' ' << "lon:  " << i.second << std::endl;
+    }
+    } catch (std::regex_error& e) {
+     if (e.code() == std::regex_constants::error_badrepeat)
+        std::cerr << "Repeat was not preceded by a valid regular expression.\n";
+     else std::cerr << "Some other regex exception happened.\n";
+    }
     PrintMenu();
     break;
   }

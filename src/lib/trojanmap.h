@@ -17,6 +17,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+// #include <boost/algorithm/string/predicate.hpp>
+// #include <boost/algorithm/string.hpp>
 
 // A Node is the location of one point in the map.
 class Node {
@@ -76,9 +78,9 @@ class TrojanMap {
   //  there should be no duplicates in the output.
   std::vector<std::string> GetAllCategories();
 
-  std::pair<double, double> GetAllLocationsFromCategory(std::string category);
+  std::vector<std::pair<double, double>> GetAllLocationsFromCategory(std::string category);
 
-  std::pair<double, double> GetLocationRegex(std::regex location);
+  std::vector<std::pair<double, double>> GetLocationRegex(std::regex location);
 
   // Returns lat and lon of the given the name.
   std::pair<double, double> GetPosition(std::string name);

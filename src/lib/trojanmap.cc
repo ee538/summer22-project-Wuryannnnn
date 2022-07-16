@@ -62,6 +62,13 @@ std::string TrojanMap::GetID(const std::string &name) {
  */
 std::pair<double, double> TrojanMap::GetPosition(std::string name) {
   std::pair<double, double> results(-1, -1);
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++ iter){
+    if (iter -> second.name.compare(name) == 0){
+      results.first = iter -> second.lat;
+      results.second = iter -> second.lon;
+    }
+  }
   return results;
 }
 
@@ -69,7 +76,65 @@ std::pair<double, double> TrojanMap::GetPosition(std::string name) {
  * CalculateEditDistance: Calculate edit distance between two location names
  *
  */
-int TrojanMap::CalculateEditDistance(std::string a, std::string b) { return 0; }
+int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
+  // std::vector<std::vector<int>> dynamic_solution(a.size(),std::vector<int>(b.size(),0));
+  
+  // for(int i =0; i < a.size(); i++){
+  //   for(int j = 0; j < b.size();j++){
+  //     dynamic_solution[i][j] = std::max(i,j);
+  //   }
+  // }
+
+  // for(int i =1; i < a.size(); i++){
+  //   for(int j = 1; j < b.size();j++){
+  //     if(a[i] == b[j]){
+  //       dynamic_solution[i][j] = dynamic_solution[i-1][j-1];
+  //     }else{
+  //       dynamic_solution[i][j] = std::min(std::min(dynamic_solution[i-1][j],dynamic_solution[i][j-1]),dynamic_solution[i-1][j-1])+1;
+  //     }
+  //   }
+  // }
+
+  // return dynamic_solution[a.size()-1][b.size()-1];
+
+
+
+  if(a.size() == 0 && b.size() == 0){
+    return 0;
+  }
+  if(a.size() > 0 && b.size() == 0){
+    return a.size();
+  }
+  if(a.size() == 0 && b.size() > 0){
+    return b.size();
+  }
+  
+  if(a[a.size()-1] == b[b.size()-1]){
+
+    return CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
+  }
+  else{
+    int temp1 = 0;
+    int temp2 = 0;
+    int temp3 = 0;
+    temp1 = CalculateEditDistance(a, b.substr(0, b.size()-1));
+    temp2 = CalculateEditDistance(a.substr(0, a.size()-1), b);
+    temp3 = CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
+    
+    
+
+    if(temp1 - temp2 <= 0 && temp1 - temp3 <= 0){
+      return temp1 + 1;
+    }
+    if(temp2 - temp1 <= 0 && temp2 - temp3 <= 0){
+      return temp2 + 1;
+    }
+    if(temp3 - temp1 <= 0 && temp3 - temp2 <= 0){
+      return temp3 + 1;
+    }
+    
+  }
+}
 
 /**
  * FindClosestName: Given a location name, return the name with smallest edit
@@ -80,6 +145,17 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b) { return 0; }
  */
 std::string TrojanMap::FindClosestName(std::string name) {
   std::string tmp = "";
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++iter){
+    std::string str = iter -> second.name;
+    
+    int temp_ = CalculateEditDistance(name, str);
+    
+    if(temp_ == 1){
+      tmp = str;
+      return tmp;
+    }
+  }
   return tmp;
 }
 
@@ -92,6 +168,18 @@ std::string TrojanMap::FindClosestName(std::string name) {
  */
 std::vector<std::string> TrojanMap::Autocomplete(std::string name) {
   std::vector<std::string> results;
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++iter){
+    // if (boost::starts_with(boost::algorithm::to_lower_copy(iter->second.name), boost::algorithm::to_lower_copy(name))){
+    //   results.push_back(iter->second.name);
+    // }
+    std::string str = iter -> second.name;
+    transform(str.begin(), str.end(), str.begin(), tolower);
+    transform(name.begin(), name.end(), name.begin(), tolower);
+    if (str.rfind(name,0) == 0){
+      results.push_back(iter -> second.name);
+    }
+  }
   return results;
 }
 
@@ -101,7 +189,22 @@ std::vector<std::string> TrojanMap::Autocomplete(std::string name) {
  *
  * @return {std::vector<std::string>}  : all unique location categories
  */
-std::vector<std::string> TrojanMap::GetAllCategories() {}
+std::vector<std::string> TrojanMap::GetAllCategories() {
+  std::vector<std::string> results;
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++iter){
+    std::unordered_set<std::string> uo_set = iter -> second.attributes;
+    std::unordered_set<std::string>::iterator set_iter;
+    for(set_iter = uo_set.begin(); set_iter != uo_set.end(); ++set_iter){
+      if(std::find(results.begin(), results.end(), *set_iter) == results.end()){
+        results.push_back(*set_iter);
+      }
+    }
+    
+
+  }
+  return results;
+}
 
 /**
  * GetAllLocationsFromCategory: Return all the locations of the input category (i.e.
@@ -111,9 +214,24 @@ std::vector<std::string> TrojanMap::GetAllCategories() {}
  * @param  {std::string} category          : category name (attribute)
  * @return {std::pair<double, double>}     : (lat, lon)
  */
-std::pair<double, double> TrojanMap::GetAllLocationsFromCategory(
-    std::string category) {}
-
+std::vector<std::pair<double, double>> TrojanMap::GetAllLocationsFromCategory(
+  std::string category) {
+    std::pair<double, double> results(-1, -1);
+    std::vector<std::pair<double, double>> v1;
+    std::unordered_map<std::string, Node>::iterator iter;
+    for (iter = data.begin(); iter != data.end(); ++iter){
+      results.first = iter -> second.lat;
+      results.second = iter -> second.lon;
+      std::unordered_set<std::string> uo_set = iter -> second.attributes;
+      std::unordered_set<std::string>::iterator set_iter;
+      for(set_iter = uo_set.begin(); set_iter != uo_set.end(); ++set_iter){
+        if(category == *set_iter){
+          v1.push_back(results);
+        }
+      }
+    }
+    return v1;
+  }
 /**
  * GetLocationRegex: Given the regular expression of a location's name, your
  * program should first check whether the regular expression is valid, and if so
@@ -123,8 +241,20 @@ std::pair<double, double> TrojanMap::GetAllLocationsFromCategory(
  * names
  * @return {std::pair<double, double>}     : (lat, lon)
  */
-std::pair<double, double> TrojanMap::GetLocationRegex(std::regex location) {}
-
+std::vector<std::pair<double, double>> TrojanMap::GetLocationRegex(std::regex location) {
+    std::pair<double, double> results(-1, -1);
+    std::vector<std::pair<double, double>> v2;
+    std::unordered_map<std::string, Node>::iterator iter;
+    for (iter = data.begin(); iter != data.end(); ++iter){
+      results.first = iter -> second.lat;
+      results.second = iter -> second.lon;
+      std::string str = iter -> second.name;
+      if(std::regex_match (str, location)){
+        v2.push_back(results);
+      }
+      }
+    return v2;
+  }
 /**
  * CalculateDistance: Get the distance between 2 nodes.
  *
