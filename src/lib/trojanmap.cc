@@ -10,7 +10,8 @@
  * @param  {std::string} id : location id
  * @return {double}         : latitude
  */
-double TrojanMap::GetLat(const std::string &id) { return 0; }
+double TrojanMap::GetLat(const std::string &id) { 
+  return data[id].lat; }
 
 /**
  * GetLon: Get the longitude of a Node given its id. If id does not exist,
@@ -19,7 +20,9 @@ double TrojanMap::GetLat(const std::string &id) { return 0; }
  * @param  {std::string} id : location id
  * @return {double}         : longitude
  */
-double TrojanMap::GetLon(const std::string &id) { return 0; }
+double TrojanMap::GetLon(const std::string &id) { 
+  return data[id].lon; 
+ }
 
 /**
  * GetName: Get the name of a Node given its id. If id does not exist, return
@@ -28,7 +31,8 @@ double TrojanMap::GetLon(const std::string &id) { return 0; }
  * @param  {std::string} id : location id
  * @return {std::string}    : name
  */
-std::string TrojanMap::GetName(const std::string &id) { return ""; }
+std::string TrojanMap::GetName(const std::string &id) { 
+  return data[id].name;  }
 
 /**
  * GetNeighborIDs: Get the neighbor ids of a Node. If id does not exist, return
@@ -38,7 +42,8 @@ std::string TrojanMap::GetName(const std::string &id) { return ""; }
  * @return {std::vector<std::string>}  : neighbor ids
  */
 std::vector<std::string> TrojanMap::GetNeighborIDs(const std::string &id) {
-  return {};
+  std::vector<std::string> res = data[id].neighbors;
+  return res;
 }
 
 /**
@@ -50,6 +55,12 @@ std::vector<std::string> TrojanMap::GetNeighborIDs(const std::string &id) {
  */
 std::string TrojanMap::GetID(const std::string &name) {
   std::string res = "";
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++ iter){
+    if (iter -> second.name.compare(name) == 0){
+      res.append(iter -> first);
+    }
+  }
   return res;
 }
 
@@ -77,28 +88,8 @@ std::pair<double, double> TrojanMap::GetPosition(std::string name) {
  *
  */
 int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
-  // std::vector<std::vector<int>> dynamic_solution(a.size(),std::vector<int>(b.size(),0));
+  std::vector<std::vector<int>> dynamic_solution(a.size(),std::vector<int>(b.size(),0));
   
-  // for(int i =0; i < a.size(); i++){
-  //   for(int j = 0; j < b.size();j++){
-  //     dynamic_solution[i][j] = std::max(i,j);
-  //   }
-  // }
-
-  // for(int i =1; i < a.size(); i++){
-  //   for(int j = 1; j < b.size();j++){
-  //     if(a[i] == b[j]){
-  //       dynamic_solution[i][j] = dynamic_solution[i-1][j-1];
-  //     }else{
-  //       dynamic_solution[i][j] = std::min(std::min(dynamic_solution[i-1][j],dynamic_solution[i][j-1]),dynamic_solution[i-1][j-1])+1;
-  //     }
-  //   }
-  // }
-
-  // return dynamic_solution[a.size()-1][b.size()-1];
-
-
-
   if(a.size() == 0 && b.size() == 0){
     return 0;
   }
@@ -108,32 +99,61 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
   if(a.size() == 0 && b.size() > 0){
     return b.size();
   }
+  for(int i =0; i < a.size(); i++){
+    for(int j = 0; j < b.size();j++){
+      dynamic_solution[i][j] = std::max(i,j);
+    }
+  }
+
+  for(int i =1; i < a.size(); i++){
+    for(int j = 1; j < b.size();j++){
+      if(a[i] == b[j]){
+        dynamic_solution[i][j] = dynamic_solution[i-1][j-1];
+      }else{
+        dynamic_solution[i][j] = std::min(std::min(dynamic_solution[i-1][j],dynamic_solution[i][j-1]),dynamic_solution[i-1][j-1])+1;
+      }
+    }
+  }
+
+  return dynamic_solution[a.size()-1][b.size()-1];
+
+
+
+  // if(a.size() == 0 && b.size() == 0){
+  //   return 0;
+  // }
+  // if(a.size() > 0 && b.size() == 0){
+  //   return a.size();
+  // }
+  // if(a.size() == 0 && b.size() > 0){
+  //   return b.size();
+  // }
   
-  if(a[a.size()-1] == b[b.size()-1]){
+  // if(a[a.size()-1] == b[b.size()-1]){
 
-    return CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
-  }
-  else{
-    int temp1 = 0;
-    int temp2 = 0;
-    int temp3 = 0;
-    temp1 = CalculateEditDistance(a, b.substr(0, b.size()-1));
-    temp2 = CalculateEditDistance(a.substr(0, a.size()-1), b);
-    temp3 = CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
+  //   return CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
+  // }
+  // else{
+  //   int temp1 = 0;
+  //   int temp2 = 0;
+  //   int temp3 = 0;
+  //   temp1 = CalculateEditDistance(a, b.substr(0, b.size()-1));
+  //   temp2 = CalculateEditDistance(a.substr(0, a.size()-1), b);
+  //   temp3 = CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
     
     
 
-    if(temp1 - temp2 <= 0 && temp1 - temp3 <= 0){
-      return temp1 + 1;
-    }
-    if(temp2 - temp1 <= 0 && temp2 - temp3 <= 0){
-      return temp2 + 1;
-    }
-    if(temp3 - temp1 <= 0 && temp3 - temp2 <= 0){
-      return temp3 + 1;
-    }
+  //   if(temp1 - temp2 <= 0 && temp1 - temp3 <= 0){
+  //     return temp1 + 1;
+  //   }
+  //   if(temp2 - temp1 <= 0 && temp2 - temp3 <= 0){
+  //     return temp2 + 1;
+  //   }
+  //   if(temp3 - temp1 <= 0 && temp3 - temp2 <= 0){
+  //     return temp3 + 1;
+  //   }
     
-  }
+  // }
 }
 
 /**
@@ -302,8 +322,44 @@ double TrojanMap::CalculatePathLength(const std::vector<std::string> &path) {
  */
 std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     std::string location1_name, std::string location2_name) {
-  std::vector<std::string> path;
-  return path;
+  std::string start = GetID(location1_name);
+  std::string end = GetID(location2_name);
+  std::map<std::string, std::vector<std::string>> visited;
+  visited[start].push_back(start);
+  std::priority_queue< std::pair<double, std::string>, 
+                      std::vector<std::pair<double, std::string>>, 
+                      std::greater<std::pair<double, std::string>>> q;
+  std::map<std::string, double> dis;
+  for (auto o: data){
+    dis[o.first] = DBL_MAX;
+  }
+  dis[start] = 0;
+  for (auto e: GetNeighborIDs(start)){
+    dis[e] = std::min(dis[e], CalculateDistance(e, start));
+  }
+  std::pair<double, std::string> p1 = {0,start};
+  q.push(p1);
+
+  while(!q.empty()){
+    std::string s1 = q.top().second;
+    q.pop();
+    for (auto s2: GetNeighborIDs(s1)){
+      double tot_dis = CalculateDistance(s1, s2);
+      if (dis[s1] + tot_dis > dis[s2]){
+        continue;
+      }
+        dis[s2] = dis[s1] + tot_dis;
+        visited[s2] = visited[s1];
+        visited[s2].push_back(s2);
+        std::pair<double, std::string> p2 = {dis[s2], s2};
+        q.push(p2);
+
+    }
+    if(q.top().second.compare(end) == 0){
+      break;
+    }
+  }
+  return visited[end];
 }
 
 /**
@@ -386,19 +442,77 @@ std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(
 std::vector<std::string> TrojanMap::DeliveringTrojan(
     std::vector<std::string> &locations,
     std::vector<std::vector<std::string>> &dependencies) {
-  std::vector<std::string> result;
-  return result;
+      std::map<std::string, int> visited;
+      std::map<std::string, int> indegree;
+      std::vector<std::string> result;
+
+      for (auto dependency :dependencies){
+        for (std::vector<std::string>::iterator iter = ++dependency.begin(); iter != dependency.end(); ++iter){
+          if (indegree[*iter] ==0) indegree[*iter] = 1;
+          else indegree[*iter] ++;
+
+        }
+      }
+      std::priority_queue<std::pair<int, std::string>, 
+                      std::vector<std::pair<int, std::string>>, 
+                      std::greater<std::pair<int, std::string>>> q;
+      for (auto i: locations){
+        if (indegree[i] == 0){
+          std::pair<int, std::string> p1 = {indegree[i], i};
+          visited[i] = 1;
+          q.push(p1);
+        }
+      }
+
+      while (!q.empty()){
+        std::string s1 = q.top().second;
+        q.pop();
+        result.push_back(s1);
+        visited[s1] = 1;
+        for (auto n:dependencies){
+          for (std::vector<std::string>::iterator iter2 = n.begin(); iter2 != n.end(); ++iter2){
+            if (s1.compare(*iter2) == 0){
+              if (iter2 + 1 != n.end()){
+                indegree[*(iter2 + 1)] --;
+                std::cout << *iter2 << std::endl;
+              }
+            }
+          }
+        }
+        for (auto m: locations){
+          if (indegree[m] == 0 && visited[m] == 0){
+            std::pair<int, std::string> p2 = {indegree[m], m};
+            q.push(p2);
+          }
+        }
+
+      }
+      return result;
 }
 
+
 /**
- * inSquare: Give a id retunr whether it is in square or not.
+ * inSquare: Give a id return whether it is in square or not.
  *
  * @param  {std::string} id            : location id
  * @param  {std::vector<double>} square: four vertexes of the square area
  * @return {bool}                      : in square or not
  */
 bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
-  return false;
+  if(GetLon(id) < square[0] || GetLon(id) > square[1]){
+    return false;
+  }
+
+  if(square[0] > square[1]){
+    return false;
+  } 
+  if(GetLat(id) > square[2] || GetLat(id) < square[3]){
+    return false;
+  }
+  if(square[3] > square[2]){
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -413,6 +527,14 @@ bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
 std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
   // include all the nodes in subgraph
   std::vector<std::string> subgraph;
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++iter){
+      if(inSquare(iter -> first, square)){
+          subgraph.push_back(iter -> first);
+      }
+      
+  }
+
   return subgraph;
 }
 
@@ -425,8 +547,71 @@ std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
  * @param {std::vector<double>} square: four vertexes of the square area
  * @return {bool}: whether there is a cycle or not
  */
+
+bool IfDuHaveCycle(std::vector<std::pair<std::string, int>> &du){
+  for(int i = 0; i < du.size(); i++){
+    if(du[i].second == 0 || du[i].second == 1){
+      return true;
+    }
+  }
+  return false;
+}
+
 bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph,
                                std::vector<double> &square) {
+
+  //求所有点的度
+  std::vector<std::pair<std::string, int>> du(subgraph.size());
+  for(int i = 0; i < subgraph.size(); i++){
+    std::string temp_id = subgraph[i];
+    du[i].first = temp_id;
+    du[i].second = 0;
+    std::vector<std::string> temp_neibor = GetNeighborIDs(temp_id);
+    
+    for(int j =0; j< temp_neibor.size(); j++){
+      std::vector<std::string>::iterator iter;
+      iter = find(subgraph.begin(),subgraph.end(),temp_neibor[j]);
+      if(iter != subgraph.end()){
+        du[i].second += 1;
+      }
+    }
+    // std::cout << du[i].first << std::endl;
+    // std::cout << du[i].second << std::endl;
+
+  }
+
+  while(IfDuHaveCycle(du)){
+    for(int i = 0; i < du.size(); i++){
+      if(du[i].second == 0 || du[i].second == 1){
+        du[i].second = -1;
+        std::vector<std::string> temp_neibor = GetNeighborIDs(du[i].first);
+        for(int j =0; j< temp_neibor.size(); j++){
+          std::vector<std::string>::iterator iter;
+          iter = find(subgraph.begin(),subgraph.end(),temp_neibor[j]);
+          if(iter != subgraph.end()){
+            for(int k = 0; k < du.size(); k++){
+              if(du[k].first.compare(*iter) && du[k].second >= 1){
+                du[k].second -= 1;
+              }
+            }
+          }
+        }
+      }
+  }
+  }
+
+  for(int i = 0; i < du.size(); i++){
+    // std::cout << du[i].second << std::endl;
+    if(du[i].second != -1){
+      return true;
+    }
+  }
+
+  
+
+  
+  
+  
   return false;
 }
 
@@ -487,4 +672,9 @@ void TrojanMap::CreateGraphFromCSVFile() {
     data[n.id] = n;
   }
   fin.close();
+}
+
+// define the rule for search for a min value in map
+bool cmp_value(const std::pair<std::string, double> left, const std::pair<std::string, double> right){
+  return left.second < right.second;
 }

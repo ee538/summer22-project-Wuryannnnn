@@ -102,10 +102,19 @@ void MapUI::PrintMenu() {
         "**************************************************************\n";
     std::cout << menu << std::endl;
     // fill in here  
+    auto start = std::chrono::high_resolution_clock::now();
     std::vector<std::string> cate = map.GetAllCategories();
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    menu = "*************************Results******************************\n";
+    std::cout << menu;
     for(auto i : cate){
       std::cout << i << std::endl;
     }
+
+    menu = "**************************************************************\n";
+    std::cout << menu;
+    std::cout << "Time taken by function: " << duration.count()/1000 << " ms" << std::endl << std::endl;
     PrintMenu();
     break;
   }
