@@ -539,7 +539,11 @@ bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph,
 
   while(IfDuHaveCycle(du)){
     for(int i = 0; i < du.size(); i++){
-      if(du[i].second == 0 || du[i].second == 1){
+      if(du[i].second == 0){
+        du[i].second = -1;
+        break;
+      }
+      if(du[i].second == 1){
         du[i].second = -1;
         std::vector<std::string> temp_neibor = GetNeighborIDs(du[i].first);
         for(int j =0; j< temp_neibor.size(); j++){
@@ -547,14 +551,14 @@ bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph,
           iter = find(subgraph.begin(),subgraph.end(),temp_neibor[j]);
           if(iter != subgraph.end()){
             for(int k = 0; k < du.size(); k++){
-              if(du[k].first.compare(*iter) && du[k].second >= 1){
+              if(du[k].first.compare(*iter)){
                 du[k].second -= 1;
               }
             }
           }
         }
       }
-  }
+    }
   }
 
   for(int i = 0; i < du.size(); i++){
