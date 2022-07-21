@@ -102,6 +102,7 @@ void MapUI::PrintMenu() {
         "**************************************************************\n";
     std::cout << menu << std::endl;
     // fill in here  
+    
     auto start = std::chrono::high_resolution_clock::now();
     std::vector<std::string> cate = map.GetAllCategories();
     auto stop = std::chrono::high_resolution_clock::now();
@@ -133,6 +134,7 @@ void MapUI::PrintMenu() {
       std::cout << "lat:  " <<i.first << ' ' << "lon:  " << i.second << std::endl;
     }
     PrintMenu();
+    
     break;
   }
   case 5:

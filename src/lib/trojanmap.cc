@@ -88,72 +88,29 @@ std::pair<double, double> TrojanMap::GetPosition(std::string name) {
  *
  */
 int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
-  std::vector<std::vector<int>> dynamic_solution(a.size(),std::vector<int>(b.size(),0));
+  std::vector<std::vector<int>> dynamic_solution(a.size()+1,std::vector<int>(b.size()+1,0));
   
-  if(a.size() == 0 && b.size() == 0){
-    return 0;
+  dynamic_solution[0][0] = 0;
+  for(int i =0; i <= a.size(); i++){
+    dynamic_solution[i][0] = i;
   }
-  if(a.size() > 0 && b.size() == 0){
-    return a.size();
+  for(int i =0; i <= b.size(); i++){
+    dynamic_solution[0][i] = i;
   }
-  if(a.size() == 0 && b.size() > 0){
-    return b.size();
-  }
+  
+
   for(int i =0; i < a.size(); i++){
     for(int j = 0; j < b.size();j++){
-      dynamic_solution[i][j] = std::max(i,j);
-    }
-  }
-
-  for(int i =1; i < a.size(); i++){
-    for(int j = 1; j < b.size();j++){
       if(a[i] == b[j]){
-        dynamic_solution[i][j] = dynamic_solution[i-1][j-1];
+        dynamic_solution[i+1][j+1] = dynamic_solution[i][j];
       }else{
-        dynamic_solution[i][j] = std::min(std::min(dynamic_solution[i-1][j],dynamic_solution[i][j-1]),dynamic_solution[i-1][j-1])+1;
+        dynamic_solution[i+1][j+1] = std::min(std::min(dynamic_solution[i][j+1],dynamic_solution[i+1][j]),dynamic_solution[i][j])+1;
       }
     }
   }
 
-  return dynamic_solution[a.size()-1][b.size()-1];
+  return dynamic_solution[a.size()][b.size()];
 
-
-
-  // if(a.size() == 0 && b.size() == 0){
-  //   return 0;
-  // }
-  // if(a.size() > 0 && b.size() == 0){
-  //   return a.size();
-  // }
-  // if(a.size() == 0 && b.size() > 0){
-  //   return b.size();
-  // }
-  
-  // if(a[a.size()-1] == b[b.size()-1]){
-
-  //   return CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
-  // }
-  // else{
-  //   int temp1 = 0;
-  //   int temp2 = 0;
-  //   int temp3 = 0;
-  //   temp1 = CalculateEditDistance(a, b.substr(0, b.size()-1));
-  //   temp2 = CalculateEditDistance(a.substr(0, a.size()-1), b);
-  //   temp3 = CalculateEditDistance(a.substr(0, a.size()-1), b.substr(0, b.size()-1));
-    
-    
-
-  //   if(temp1 - temp2 <= 0 && temp1 - temp3 <= 0){
-  //     return temp1 + 1;
-  //   }
-  //   if(temp2 - temp1 <= 0 && temp2 - temp3 <= 0){
-  //     return temp2 + 1;
-  //   }
-  //   if(temp3 - temp1 <= 0 && temp3 - temp2 <= 0){
-  //     return temp3 + 1;
-  //   }
-    
-  // }
 }
 
 /**
