@@ -1,7 +1,7 @@
 Item 2-2: 0 / 2 passed | score: 0
-Item 6: 0 / 6 passed | score: 0
+Item 6: 3 / 6 passed | score: 6
 Item 7: 0 / 2 passed | score: 0.0
-Item 8: 0 / 2 passed | score: 0.0
+Item 8: 2 / 2 passed | score: 5.0
 -----------------------------------------
-Phase 2: your score of coding section: 0.0  (part)
+Phase 2: your score of coding section: 11.0  (part)
 -----------------------------------------
