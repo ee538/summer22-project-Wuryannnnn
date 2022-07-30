@@ -334,6 +334,8 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
   return path;
 }
 
+
+
 /**
  * Traveling salesman problem: Given a list of locations, return the shortest
  * path which visit all the places and back to the start point.
@@ -342,21 +344,217 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
  * @return {std::pair<double, std::vector<std::vector<std::string>>} : a pair of
  * total distance and the all the progress to get final path
  */
+void TrojanMap::TravelingTrojan_BF(std::string start,
+                        std::vector<std::string> location_ids,
+                        std::vector<std::string> cur_path, 
+                        double &min_cost,
+                        std::vector<std::string> &min_path,
+                        std::vector<std::vector<std::string>> &record_list){
+    if (cur_path.size() == location_ids.size()){
+      cur_path.push_back(start);
+      double cost = CalculatePathLength(cur_path);
+      if(cost < min_cost){
+        min_cost = cost;
+        min_path = cur_path;
+        record_list.push_back(cur_path);
+      }
+      return;
+    }
+
+    for(int i =0; i< location_ids.size(); i++){
+      if(std::find(cur_path.begin(),cur_path.end(), location_ids[i]) != cur_path.end()){
+        continue;
+      }
+
+      cur_path.push_back(location_ids[i]);
+      TravelingTrojan_BF(start, location_ids,cur_path, min_cost, min_path,record_list);
+      cur_path.pop_back();
+    }
+}
+
 std::pair<double, std::vector<std::vector<std::string>>>
 TrojanMap::TravelingTrojan_Brute_force(std::vector<std::string> location_ids) {
-  std::pair<double, std::vector<std::vector<std::string>>> records;
+  //递归法
+  /*
+  std::vector<std::vector<std::string>> order_list;
+  double distance = 100000;
+  
+  if(location_ids.size() == 0){
+    std::pair<double, std::vector<std::vector<std::string>>> records(0,order_list);
+    return records;
+  }
+  std::string current_id = location_ids[0];
+  if(location_ids.size() == 1){
+    std::vector<std::string> paths;
+    paths.push_back(current_id);
+    paths.push_back(current_id);
+    order_list.push_back(paths);
+    std::pair<double, std::vector<std::vector<std::string>>> records(0,order_list);
+    return records;
+  }
+
+  //执行递归少掉开头的情况
+    std::vector<std::string> next_vector;
+    for(int j = 1;j < location_ids.size(); j++){
+          next_vector.push_back(location_ids[j]);
+          //std::cout << location_ids[j] << std::endl;
+      }
+      std::pair<double, std::vector<std::vector<std::string>>> next;
+      next = TravelingTrojan_Brute_force(next_vector);
+
+      std::vector<std::vector<std::string>> next_paths = next.second;
+      //遍历所有递归后的结果
+      for(int k = 0; k < next_paths.size(); k++){
+        
+        //根据位置插入current ID
+         for(int n = 0; n < next_paths[k].size() - 1; n++){
+          std::vector<std::string> paths;
+          paths.push_back(current_id);
+          for(int m = 0; m < next_paths[k].size() - 1; m++){
+            int index = m + n;
+            if(index >= next_paths[k].size() - 1){
+              index = index - next_paths[k].size() + 1;
+            }
+            
+            paths.push_back(next_paths[k][index]);
+          }
+          paths.push_back(current_id);
+
+
+          //计算paths的长度 与最小值做比较
+          double temp_d = CalculatePathLength(paths);
+          order_list.push_back(paths);
+          if(distance > temp_d){
+            distance = temp_d;
+          }
+        }
+        
+      
+    }
+    
+  std::pair<double, std::vector<std::vector<std::string>>> records(distance,order_list);
   return records;
+*/
+  //
+  std::vector<std::vector<std::string>> order_list;
+  if(location_ids.size() == 0){
+    std::pair<double, std::vector<std::vector<std::string>>> records(0,order_list);
+    return records;
+  }
+  std::string current_id = location_ids[0];
+  if(location_ids.size() == 1){
+    std::vector<std::string> paths;
+    paths.push_back(current_id);
+    paths.push_back(current_id);
+    order_list.push_back(paths);
+    std::pair<double, std::vector<std::vector<std::string>>> records(0,order_list);
+    return records;
+  }
+  std::vector<std::string> cur_path = {location_ids[0]};
+  std::vector<std::string> min_path;
+  double min_cost = INT_MAX;
+  TravelingTrojan_BF(current_id,location_ids,cur_path,min_cost,min_path,order_list);
+  std::pair<double, std::vector<std::vector<std::string>>> records(min_cost,order_list);
+  return records;
+
+
+}
+
+void TrojanMap::TravelingTrojan_BT(std::string start,
+                        std::vector<std::string> location_ids,
+                        std::vector<std::string> cur_path, 
+                        double &min_cost,
+                        std::vector<std::string> &min_path,
+                        std::vector<std::vector<std::string>> &record_list){
+    if (cur_path.size() ==location_ids.size()){
+      cur_path.push_back(start);
+      double cost = CalculatePathLength(cur_path);
+      if(cost < min_cost){
+        min_cost = cost;
+        min_path = cur_path;
+        record_list.push_back(cur_path);
+      }
+      return;
+    }
+    double cost = CalculatePathLength(cur_path);
+    if(cost >= min_cost){
+        return;
+    }
+    for(int i =0; i< location_ids.size(); i++){
+      if(std::find(cur_path.begin(),cur_path.end(), location_ids[i])!= cur_path.end()){
+        continue;
+      }
+
+      cur_path.push_back(location_ids[i]);
+      TravelingTrojan_BT(start, location_ids,cur_path, min_cost, min_path,record_list);
+      cur_path.pop_back();
+    }
 }
 
 std::pair<double, std::vector<std::vector<std::string>>>
 TrojanMap::TravelingTrojan_Backtracking(std::vector<std::string> location_ids) {
-  std::pair<double, std::vector<std::vector<std::string>>> records;
+  std::vector<std::vector<std::string>> order_list;
+  if(location_ids.size() == 0){
+    std::pair<double, std::vector<std::vector<std::string>>> records(0,order_list);
+    return records;
+  }
+  std::string current_id = location_ids[0];
+  if(location_ids.size() == 1){
+    std::vector<std::string> paths;
+    paths.push_back(current_id);
+    paths.push_back(current_id);
+    order_list.push_back(paths);
+    std::pair<double, std::vector<std::vector<std::string>>> records(0,order_list);
+    return records;
+  }
+  std::vector<std::string> cur_path = {location_ids[0]};
+  std::vector<std::string> min_path;
+  
+  double min_cost = INT_MAX;
+  TravelingTrojan_BT(current_id,location_ids,cur_path,min_cost,min_path,order_list);
+  std::pair<double, std::vector<std::vector<std::string>>> records(min_cost,order_list);
   return records;
 }
 
 std::pair<double, std::vector<std::vector<std::string>>>
 TrojanMap::TravelingTrojan_2opt(std::vector<std::string> location_ids) {
-  std::pair<double, std::vector<std::vector<std::string>>> records;
+  
+  std::vector<std::vector<std::string>> order_list;
+  std::vector<std::string> min_path = location_ids;
+  min_path.push_back(location_ids[0]);
+  double min_cost = CalculatePathLength(min_path);
+  min_path.pop_back();
+  bool improve = true;
+  while (improve){
+    improve = false;
+    for(int i = 1; i< min_path.size()-2;i++){
+      for(int j = i+1; j< min_path.size(); j++){
+        std::vector<std::string> new_path;
+        for(int m = 0; m < i; m++){
+          new_path.push_back(min_path[m]);
+        }
+        for(int m = j; m >= i; m--){
+          new_path.push_back(min_path[m]);
+        }
+        for(int m = j+1; m<min_path.size();m++){
+          new_path.push_back(min_path[m]);
+        }
+        new_path.push_back(min_path[0]);
+        double cost = CalculatePathLength(new_path);
+        if(cost < min_cost){
+          min_cost = cost;
+          min_path = new_path;
+          order_list.push_back(new_path);
+          min_path.pop_back();
+          improve = true;
+        }
+
+
+      }
+    }
+  }
+
+  std::pair<double, std::vector<std::vector<std::string>>> records(min_cost,order_list);
   return records;
 }
 
@@ -370,8 +568,22 @@ TrojanMap::TravelingTrojan_2opt(std::vector<std::string> location_ids) {
 std::vector<std::string> TrojanMap::ReadLocationsFromCSVFile(
     std::string locations_filename) {
   std::vector<std::string> location_names_from_csv;
+  std::ifstream inFile(locations_filename, std::ios::in);
+  std::string lineStr;
+  if(inFile.fail()) std::cout << "fail to read the location file." << std::endl;
+  while(getline(inFile, lineStr)){
+    std::cout << lineStr << std::endl;
+    std::stringstream ss(lineStr);
+    std::string str;
+    // std::vector <std::string> lineArray;
+    while(getline(ss, str, ',')){
+      location_names_from_csv.push_back(str);
+    }
+    
+  }
   return location_names_from_csv;
 }
+
 
 /**
  * Given CSV filenames, it read and parse dependencise data from CSV file,
@@ -383,6 +595,21 @@ std::vector<std::string> TrojanMap::ReadLocationsFromCSVFile(
 std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(
     std::string dependencies_filename) {
   std::vector<std::vector<std::string>> dependencies_from_csv;
+  std::fstream fin;
+  fin.open(dependencies_filename, std::ios::in);
+  std::string lineStr;
+  if(fin.fail()) std::cout << "fail to read the dependency file." << std::endl;
+  while(getline(fin, lineStr)){
+    std::cout << lineStr << std::endl;
+    std::stringstream ss(lineStr);
+    std::string str;
+    std::vector <std::string> lineArray;
+    while(getline(ss, str, ',')){
+      lineArray.push_back(str);
+    }
+  dependencies_from_csv.push_back(lineArray);
+  }
+
   return dependencies_from_csv;
 }
 
@@ -590,7 +817,30 @@ bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph,
 std::vector<std::string> TrojanMap::FindNearby(std::string attributesName,
                                                std::string name, double r,
                                                int k) {
+  std::string id = GetID(name);
   std::vector<std::string> res;
+  std::priority_queue< std::pair<double, std::string>, 
+                    std::vector<std::pair<double, std::string>>, 
+                    std::greater<std::pair<double, std::string>>> q;
+
+  for (auto n : data){
+    if (n.second.attributes.count(attributesName) != 0 && CalculateDistance(n.first, id) <= r && n.second.id.compare(id) != 0){
+      std::pair<double, std::string> p1 = {CalculateDistance(n.first, id), n.second.id};
+      q.push(p1);
+    }
+  }
+  if (q.size() >= k){
+    for (int i = 0; i < k; i++){
+      res.push_back(q.top().second);
+      q.pop();
+    }
+  } else {
+    while(!q.empty()){
+      res.push_back(q.top().second);
+
+      q.pop();
+    }
+  }
   return res;
 }
 

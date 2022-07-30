@@ -126,9 +126,21 @@ class TrojanMap {
   // and the second member is the reordered vector of points.
   // (Notice that we don't find the optimal answer. You can return an estimated
   // path.)
+  void TravelingTrojan_BF(std::string start,
+                        std::vector<std::string> location_ids,
+                        std::vector<std::string> cur_path, 
+                        double &min_cost,
+                        std::vector<std::string> &min_path,
+                        std::vector<std::vector<std::string>> &record_list);
+
   std::pair<double, std::vector<std::vector<std::string>>>
   TravelingTrojan_Brute_force(std::vector<std::string> location_ids);
-
+  void TravelingTrojan_BT(std::string start,
+                        std::vector<std::string> location_ids,
+                        std::vector<std::string> cur_path, 
+                        double &min_cost,
+                        std::vector<std::string> &min_path,
+                        std::vector<std::vector<std::string>> &record_list);
   std::pair<double, std::vector<std::vector<std::string>>>
   TravelingTrojan_Backtracking(std::vector<std::string> location_ids);
 
