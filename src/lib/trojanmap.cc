@@ -120,13 +120,26 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
  * @param  {std::string} name          : location name
  * @return {std::string} tmp           : similar name
  */
+
+std::string tolower_(std::string a){
+  if(a.size() == 0){
+    return "Nothing be found";
+  }
+  for(int i = 0; i < a.size(); i++){
+    if(a[i] >= 'A' && a[i] <= 'Z'){
+      a[i] += 32;
+    }
+  }
+  return a;
+}
+
 std::string TrojanMap::FindClosestName(std::string name) {
   std::string tmp = "";
   std::unordered_map<std::string, Node>::iterator iter;
   for (iter = data.begin(); iter != data.end(); ++iter){
     std::string str = iter -> second.name;
     
-    int temp_ = CalculateEditDistance(name, str);
+    int temp_ = CalculateEditDistance(tolower_(name), tolower_(str));
     
     if(temp_ == 1){
       tmp = str;
@@ -331,6 +344,53 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
 std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
     std::string location1_name, std::string location2_name) {
   std::vector<std::string> path;
+  std::map<std::string, std::pair<std::string, double>> round;
+  std::unordered_map<std::string, Node>::iterator iter;
+  for (iter = data.begin(); iter != data.end(); ++iter){
+    //std::pair<std::string, double> temp;
+    round[iter -> first] =  {"", INT_MAX};
+  }
+  std::string start = GetID(location1_name);
+  std::string end = GetID(location2_name);
+  round[start] = {"START", 0};
+  bool relax = true;
+  for(int i =0; i< data.size(); i++){
+
+    if(relax == false){
+      break;
+    }
+    relax = false;
+    for (iter = data.begin(); iter != data.end(); ++iter){
+
+        std::vector<std::string> neighbor = GetNeighborIDs(iter->first);
+        for(std::string s: neighbor){
+            if(round[iter->first].second > round[s].second + CalculateDistance(s,iter->first)){
+              round[iter->first].first = s;
+              round[iter->first].second = round[s].second + CalculateDistance(s,iter->first);
+              relax = true;
+            }
+        }
+    }
+    
+  }
+
+  path.push_back(end);
+  std::string prev;
+  prev = round[end].first;
+  std::cout << round[end].second <<std::endl;
+  if(prev.compare("") == 0){
+    std::vector<std::string> empty;
+    return empty;
+  }
+
+  while(prev.compare("START") != 0){
+    path.push_back(prev);
+    prev = round[prev].first;
+  }
+
+  
+  
+  std::reverse(path.begin(),path.end());
   return path;
 }
 
