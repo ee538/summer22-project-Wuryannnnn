@@ -141,7 +141,7 @@ std::string TrojanMap::FindClosestName(std::string name) {
     
     int temp_ = CalculateEditDistance(tolower_(name), tolower_(str));
     
-    if(temp_ == 1){
+    if(temp_ == 2){
       tmp = str;
       return tmp;
     }

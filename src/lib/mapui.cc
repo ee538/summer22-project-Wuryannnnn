@@ -129,10 +129,18 @@ void MapUI::PrintMenu() {
     // fill in here 
     std::cout << "Please enter your catergory:  ";
     getline(std::cin, input);
+    auto start = std::chrono::high_resolution_clock::now();
     std::vector<std::pair<double, double>> cake = map.GetAllLocationsFromCategory(input);
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    menu = "*************************Results******************************\n";
     for(auto i : cake){
       std::cout << "lat:  " <<i.first << ' ' << "lon:  " << i.second << std::endl;
     }
+    menu = "**************************************************************\n";
+    std::cout << menu;
+    std::cout << "Time taken by function: " << duration.count()/1000 << " ms" << std::endl << std::endl;
+    
     PrintMenu();
     
     break;
@@ -147,6 +155,7 @@ void MapUI::PrintMenu() {
     // fill in here
     std::cout << "Please enter your regex:  ";
     getline(std::cin, input);
+    auto start = std::chrono::high_resolution_clock::now();
     try {
     std::regex location(input);
     std::vector<std::pair<double, double>> cup = map.GetLocationRegex(location);
@@ -161,6 +170,13 @@ void MapUI::PrintMenu() {
         std::cerr << "Repeat was not preceded by a valid regular expression.\n";
      else std::cerr << "Some other regex exception happened.\n";
     }
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+    menu = "**************************************************************\n";
+    std::cout << menu;
+    std::cout << "Time taken by function: " << duration.count()/1000 << " ms" << std::endl << std::endl;
+
     PrintMenu();
     break;
   }
