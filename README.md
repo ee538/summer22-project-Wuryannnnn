@@ -236,7 +236,9 @@ Time taken by function: 2 ms
 ```
 
 - What is the runtime of your algorithm? 
+It is O(n).
 - (Optional) Can you do it faster than `O(n)`?
+Using std::find function, should be able to reach O(1) run time.
 
 ## Item 2-1: Find the place's coordinates in the Map (Phase 1)
 
@@ -368,6 +370,68 @@ Please report and compare the time spent by these algorithms.
 |                      |  t1         | t2    |   t3  |
 
 Your table should show have at least 15 rows.
+|Point A to Point B |  Dijkstra | Bellman Ford| Bellman Ford optimized|
+|------------------ | ----------- |-------|-----|
+|Ralphs to Target   | 1871 ms     | 49747 ms| 
+|------------------ | ----------- |-------|-----|
+|Adams Fuel to KFC  | 395617 ms   | 61017 ms|
+|------------------ | ----------- |-------|-----|
+|Bank of America to Chick-fil-A| 10880 ms| 47958 ms|
+|------------------ | ----------- |-------|-----|
+|Chipotle to Burger King| 7345 ms | 42745 ms| 
+|------------------ | ----------- |-------|-----|
+|CVS Pharmacy to Popeyes| 676 ms  | 47565 ms|
+|------------------ | ----------- |-------|-----|
+|Food 4 Less to Five Guys| 117268 ms| 62845 ms|
+|------------------ | ----------- |-------|-----|
+|Jack in the Box to Jostar| 4329 ms| 57210 ms|
+|------------------ | ----------- |-------|-----|
+|Bank of America to Starbucks 1| 2060 ms | 47202 ms|
+|------------------ | ----------- |-------|-----|
+|Target to Tommy Trojan| 206 ms| 50673 ms| 
+|------------------ | ----------- |-------|-----|
+|CVS Pharmacy to Crosswalk| 12609 ms | 56635 ms|
+|------------------ | ----------- |-------|-----|
+|The Mirage to Village Cobbler| 160 ms | 52355 ms|
+|------------------ | ----------- |-------|-----|
+|USC Village Gym to USC Parking | 214 ms | 48790 ms |
+|------------------ | ----------- |-------|-----|
+|Broadway & 12th to Broadway & 11th| 141 ms | 73785 ms |
+|------------------ | ----------- |-------|-----|
+|USC Village Gym to Target| 127 ms | 46495 ms | 
+|------------------ | ----------- |-------|-----|
+|Five Guys to McDonalds | 42396 ms | 60260 ms |
+
+All the graphs are under img file.
+
+
+
+
+Example of the output:
+```
+**************************************************************
+* 6. CalculateShortestPath                                    
+**************************************************************
+
+Please input the start location:Target
+Please input the destination:Tommy Trojan
+*************************Dijkstra*****************************
+*************************Results******************************
+"5237417650","6814769289","6813379584","6813360961","6813379480","6813360960","6814620882","6813360954","6813360952","6813379420","6813360951","6813360936","6813379467","6813379466","6813379465","6813379464","3402887075","6813379432","4536989637","4536989640","3443310465","6813379491","6818390136","3433701978","4536989636","3432332948","2776870273","9559677954","6814620870","122844995","3229367545","3229367546","4399697341","4399697358","2305853438",
+The distance of the path is:0.426994 miles
+**************************************************************
+Time taken by function: 206 ms
+
+0.426994
+*************************Bellman_Ford*************************
+*************************Results******************************
+"5237417650","6814769289","6813379584","6813360961","6813379480","6813360960","6814620882","6813360954","6813360952","6813379420","6813360951","6813360936","6813379467","6813379466","6813379465","6813379464","3402887075","6813379432","4536989637","4536989640","3443310465","6813379491","6818390136","3433701978","4536989636","3432332948","2776870273","9559677954","6814620870","122844995","3229367545","3229367546","4399697341","4399697358","2305853438",
+The distance of the path is:0.426994 miles
+**************************************************************
+Time taken by function: 50673 ms
+```
+
+
 
 Example
 ```
@@ -449,17 +513,78 @@ Hint:
 Note
 - **Your report should show several examples of topological sort with at least 5 to 10 nodes.**
 
+All the images are under img file.
 
-Below is an example output of 3 nodes
-```shell
+Example1
+Name
+Ralphs
+KFC
+Chick-fil-A
+Target
+Burger King
+Food 4 Less
+CVS Pharmacy
+
+Source, Destination
+Ralphs,Chick-fil-A
+Ralphs,KFC
+Chick-fil-A,KFC
+KFC,Target
+Target,Burger King
+Burger King,Food 4 Less
+Food 4 Less,CVS Pharmacy
+
+```
+**************************************************************
+* 8. Topological Sort                                         
+**************************************************************
+
+Please input the locations filename:/Users/ligeng/Documents/Project/summer22-project-Wuryannnnn/input/topologicalsort_locations.csv
+Please input the dependencies filename:/Users/ligeng/Documents/Project/summer22-project-Wuryannnnn/input/topologicalsort_dependencies.csv
 *************************Results******************************
 Topological Sorting Results:
 Ralphs
 Chick-fil-A
 KFC
+Target
+Burger King
+Food 4 Less
+CVS Pharmacy
 **************************************************************
-Time taken by function: 2 ms
+Time taken by function: 0 ms
 ```
+Example2:
+Name
+Ralphs
+KFC
+Chick-fil-A
+Target
+Burger King
+Food 4 Less
+CVS Pharmacy
+
+
+Source, Destination
+Ralphs,Chick-fil-A
+KFC,Ralphs
+Chick-fil-A,KFC
+KFC,Target
+Target,Burger King
+Burger King,Food 4 Less
+Food 4 Less,CVS Pharmacy
+
+**************************************************************
+* 8. Topological Sort                                         
+**************************************************************
+
+Please input the locations filename:/Users/ligeng/Documents/Project/summer22-project-Wuryannnnn/input/topologicalsort_locations.csv
+Please input the dependencies filename:/Users/ligeng/Documents/Project/summer22-project-Wuryannnnn/input/topologicalsort_dependencies copy.csv
+*************************Results******************************
+There is no topological sort for the given graph.
+**************************************************************
+Time taken by function: 0 ms
+
+All the images are under img file.
 <p align="center"><img src="img/TopologicalSort.png" alt="TSP" width="500"/></p>
 
 In the user interface, we read the locations and dependencies from `topologicalsort_dependencies.csv` and `topologicalsort_locations.csv` to modify your input there.
@@ -584,7 +709,66 @@ Find Nearby Results:
 Time taken by function: 5 ms
 ```
 
+All the images are under img file.
+
+Example 1:
+```
+**************************************************************
+* 10. Find Nearby                                              
+**************************************************************
+
+Please input the attribute:car
+Please input the locations:Target
+Please input radius r:10
+Please input number k:5
+*************************Results******************************
+Find Nearby Results:
+1 Felix Chevrolet
+2 Honda
+**************************************************************
+Time taken by function: 38 ms
+```
+
+Example 2:
+```
+**************************************************************
+* 10. Find Nearby                                              
+**************************************************************
+
+Please input the attribute:fast_food
+Please input the locations:USC Village Gym
+Please input radius r:10
+Please input number k:4
+*************************Results******************************
+Find Nearby Results:
+1 Stout Burger
+2 Honeybird
+3 City Tacos
+4 KFC
+**************************************************************
+Time taken by function: 38 ms
+```
+Example 3:
+```
+**************************************************************
+* 10. Find Nearby                                              
+**************************************************************
+
+Please input the attribute:food_court
+Please input the locations:Food 4 Less
+Please input radius r:25
+Please input number k:6
+*************************Results******************************
+Find Nearby Results:
+1 Cosmo Plaza
+**************************************************************
+Time taken by function: 37 ms
+```
+All the images are under img file.
+
 <p align="center"><img src="img/Nearby.png" alt="Nearby" width="500"/></p>
+
+
 
 
 ## Reporting Runtime:

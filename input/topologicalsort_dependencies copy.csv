@@ -1,6 +1,6 @@
 Source, Destination
 Ralphs,Chick-fil-A
-Ralphs,KFC
+KFC,Ralphs
 Chick-fil-A,KFC
 KFC,Target
 Target,Burger King
