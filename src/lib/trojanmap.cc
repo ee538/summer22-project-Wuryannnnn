@@ -709,7 +709,9 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(
       while (!q.empty()){
         std::string s1 = q.top().second;
         q.pop();
-        result.push_back(s1);
+        if (std::find(result.begin(), result.end(), s1) == result.end()){
+          result.push_back(s1);
+        }
         visited[s1] = 1;
         for (auto n:dependencies){
           for (std::vector<std::string>::iterator iter2 = n.begin(); iter2 != n.end(); ++iter2){

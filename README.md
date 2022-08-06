@@ -235,6 +235,64 @@ Chevron
 Time taken by function: 2 ms
 ```
 
+
+
+```shell
+**************************************************************
+* 1. Autocomplete                                             
+**************************************************************
+
+Please input a partial location:s
+*************************Results******************************
+Stimson House
+Saint Cecilia School
+Smoke Shop
+Stout Burger
+St Agnes Church
+Security Checkpoint
+Shall Gas
+Social Security Administration
+SunLife Organics
+Student Union (STU)
+Starbucks 3
+San Pedro Street 2
+Starbucks 2
+Safety Pole
+San Julian & 12th
+Starbucks 1
+Spiritual Fellowship Church
+Studio 423
+Soles Bicycles
+San Pedro Street 1
+Starbucks
+St. Philips Episcopal Church
+St. Johns Cathedral-Hope Net
+Saint Lukes Missionary Baptist Church
+San Pedro Street
+Subway
+Saint Agnes Elementary School
+Saint James Park
+Shell
+Subway 1
+Saint Marks Lutheran Church
+Santa Barbara Avenue School
+Sonny Astani School of Civil Engineering
+Strangers Rest Baptist Church
+Saint Patrick School
+Sweet illusion
+Second Baptist Church
+Senshin Buddhist Church
+Saint Patricks Catholic Church
+Servants of Mary Convent
+Saint John Baptist Church
+Saint Phillips Episcopal Church
+Schoenfeld Symphonic Hall
+Safety Pole 1
+St. Francis Center - Food Bank
+**************************************************************
+Time taken by function: 13 ms
+```
+
 - What is the runtime of your algorithm? 
 It is O(n).
 - (Optional) Can you do it faster than `O(n)`?
@@ -264,6 +322,20 @@ Latitude: 34.0257 Longitude: -118.284
 **************************************************************
 Time taken by function: 1 ms
 ```
+
+```shell
+**************************************************************
+* 2. Find the location                                        
+**************************************************************
+
+Please input a location:CVS Pharmacy
+*************************Results******************************
+Latitude: 34.0235 Longitude: -118.279
+**************************************************************
+Time taken by function: 6 ms
+```
+
+Time complexity: O(n)
 
 <p align="center"><img src="img/Target.png" alt="Target" width="500"/></p>
 
@@ -331,6 +403,8 @@ Some of the locations have category types (`attributes` field in `data.csv` file
 
 In this section, your program should print all available categories among all existing categories in the map. There should be no duplicates in the output.
 
+Time compelxity: O(n)
+
 ## Item 4: Get All Locations In A Category (Phase 2)
 
 ```c++
@@ -338,6 +412,8 @@ std::pair<double, double> GetAllLocationsFromCategory(std::string category);
 ```
 
 In this section if the user entries a category, the program prints all locations that match that category. For example, if there is a category called "Grocery", your program should print all locations that match the "Grocery" category. 
+
+Time complexity: O(n)
 
 ## Item 5: Get Locations Using A Regular Expression (Phase 2)
 
@@ -349,6 +425,7 @@ In this section if the user enters a [regular expression](https://en.wikipedia.o
 
 Your program should also verify if the input regular expression was correct.
 
+Time complexity: O(n)
 
 ## Item 6: CalculateShortestPath between two places (Phase 2)
 
@@ -371,40 +448,26 @@ Please report and compare the time spent by these algorithms.
 
 Your table should show have at least 15 rows.
 |Point A to Point B |  Dijkstra | Bellman Ford| Bellman Ford optimized|
-|------------------ | ----------- |-------|-----|
-|Ralphs to Target   | 1871 ms     | 49747 ms| 
-|------------------ | ----------- |-------|-----|
-|Adams Fuel to KFC  | 395617 ms   | 61017 ms|
-|------------------ | ----------- |-------|-----|
-|Bank of America to Chick-fil-A| 10880 ms| 47958 ms|
-|------------------ | ----------- |-------|-----|
-|Chipotle to Burger King| 7345 ms | 42745 ms| 
-|------------------ | ----------- |-------|-----|
-|CVS Pharmacy to Popeyes| 676 ms  | 47565 ms|
-|------------------ | ----------- |-------|-----|
-|Food 4 Less to Five Guys| 117268 ms| 62845 ms|
-|------------------ | ----------- |-------|-----|
-|Jack in the Box to Jostar| 4329 ms| 57210 ms|
-|------------------ | ----------- |-------|-----|
-|Bank of America to Starbucks 1| 2060 ms | 47202 ms|
-|------------------ | ----------- |-------|-----|
-|Target to Tommy Trojan| 206 ms| 50673 ms| 
-|------------------ | ----------- |-------|-----|
-|CVS Pharmacy to Crosswalk| 12609 ms | 56635 ms|
-|------------------ | ----------- |-------|-----|
-|The Mirage to Village Cobbler| 160 ms | 52355 ms|
-|------------------ | ----------- |-------|-----|
-|USC Village Gym to USC Parking | 214 ms | 48790 ms |
-|------------------ | ----------- |-------|-----|
-|Broadway & 12th to Broadway & 11th| 141 ms | 73785 ms |
-|------------------ | ----------- |-------|-----|
-|USC Village Gym to Target| 127 ms | 46495 ms | 
-|------------------ | ----------- |-------|-----|
-|Five Guys to McDonalds | 42396 ms | 60260 ms |
+|Ralphs to Target   | 1871 ms     | 49747 ms| 17265 ms |
+|Adams Fuel to KFC  | 395617 ms   | 61017 ms| 40165 ms |
+|Bank of America to Chick-fil-A| 10880 ms| 47958 ms| 23645 ms |
+|Chipotle to Burger King| 7345 ms | 42745 ms| 10276 ms |
+|CVS Pharmacy to Popeyes| 676 ms  | 47565 ms| 8195 ms |
+|Food 4 Less to Five Guys| 117268 ms| 62845 ms| 42785 ms |
+|Jack in the Box to Jostar| 4329 ms| 57210 ms| 20649 ms |
+|Bank of America to Starbucks 1| 2060 ms | 47202 ms| 16230 ms|
+|Target to Tommy Trojan| 206 ms| 50673 ms| 29572 ms |
+|CVS Pharmacy to Crosswalk| 12609 ms | 56635 ms| 25295 ms |
+|The Mirage to Village Cobbler| 160 ms | 52355 ms| 9105 ms |
+|USC Village Gym to USC Parking | 214 ms | 48790 ms | 3620 ms |
+|Broadway & 12th to Broadway & 11th| 141 ms | 73785 ms | 6390 ms |
+|USC Village Gym to Target| 127 ms | 46495 ms | 10584 ms |
+|Five Guys to McDonalds | 42396 ms | 60260 ms | 52910 ms |
 
 All the graphs are under img file.
 
-
+Time complexity: Dijkstra: O(nlogn)
+Bellman-Ford: O(n*m)
 
 
 Example of the output:
@@ -471,6 +534,80 @@ Then try to determine if there is a cycle path in the that subgraph.
 If it does, return true and report the path of the cycle on the map. Otherwise return false.
 
 **Your report should include at least five examples.**
+Example 1:
+```shell
+**************************************************************
+* 7. Cycle Detection                                          
+**************************************************************
+
+Please input the left bound longitude(between -118.320 and -118.250):-118.300
+Please input the right bound longitude(between -118.320 and -118.250):-118.250
+Please input the upper bound latitude(between 34.000 and 34.040):34.040
+Please input the lower bound latitude(between 34.000 and 34.040):34.030
+*************************Results******************************
+there exists a cycle in the subgraph 
+**************************************************************
+Time taken by function: 3865 ms
+```
+Example 2:
+```shell
+**************************************************************
+* 7. Cycle Detection                                          
+**************************************************************
+
+Please input the left bound longitude(between -118.320 and -118.250):-118.320
+Please input the right bound longitude(between -118.320 and -118.250):-118.300
+Please input the upper bound latitude(between 34.000 and 34.040):34.010
+Please input the lower bound latitude(between 34.000 and 34.040):34.000
+*************************Results******************************
+there exists a cycle in the subgraph 
+**************************************************************
+Time taken by function: 50 ms
+```
+
+Example 3:
+```shell
+Please input the left bound longitude(between -118.320 and -118.250):-118.300
+Please input the right bound longitude(between -118.320 and -118.250):-118.291
+Please input the upper bound latitude(between 34.000 and 34.040):34.010
+Please input the lower bound latitude(between 34.000 and 34.040):34.005
+*************************Results******************************
+there exists a cycle in the subgraph 
+**************************************************************
+Time taken by function: 9 ms
+```
+Example 4:
+```shell
+**************************************************************
+* 7. Cycle Detection                                          
+**************************************************************
+
+Please input the left bound longitude(between -118.320 and -118.250):-118.260
+Please input the right bound longitude(between -118.320 and -118.250):-118.251
+Please input the upper bound latitude(between 34.000 and 34.040):34.034
+Please input the lower bound latitude(between 34.000 and 34.040):34.030
+*************************Results******************************
+there exists a cycle in the subgraph 
+**************************************************************
+Time taken by function: 10 ms
+```
+Example 5:
+```shell:
+**************************************************************
+* 7. Cycle Detection                                          
+**************************************************************
+
+Please input the left bound longitude(between -118.320 and -118.250):-118.290
+Please input the right bound longitude(between -118.320 and -118.250):-118.271
+Please input the upper bound latitude(between 34.000 and 34.040):34.025
+Please input the lower bound latitude(between 34.000 and 34.040):34.010
+*************************Results******************************
+there exists a cycle in the subgraph 
+**************************************************************
+Time taken by function: 1522 ms
+```
+
+Time complexity: O(n)
 
 ## Item 8: Topological Sort (Phase 2)
 
@@ -534,7 +671,7 @@ Target,Burger King
 Burger King,Food 4 Less
 Food 4 Less,CVS Pharmacy
 
-```
+```shell
 **************************************************************
 * 8. Topological Sort                                         
 **************************************************************
@@ -573,6 +710,7 @@ Target,Burger King
 Burger King,Food 4 Less
 Food 4 Less,CVS Pharmacy
 
+```shell
 **************************************************************
 * 8. Topological Sort                                         
 **************************************************************
@@ -583,6 +721,45 @@ Please input the dependencies filename:/Users/ligeng/Documents/Project/summer22-
 There is no topological sort for the given graph.
 **************************************************************
 Time taken by function: 0 ms
+```
+
+
+Example 3:
+
+Name
+Five Guys
+Bank of America
+Starbucks 1
+Crosswalk
+McDonalds
+
+Source, Destination
+McDonalds,Five Guys
+McDonalds,Starbucks 1
+Five Guys,Bank of America
+Starbucks 1,Bank of America
+Bank of America,Crosswalk
+
+```shell
+**************************************************************
+* 8. Topological Sort                                         
+**************************************************************
+
+Please input the locations filename:/Users/ligeng/Documents/Project/summer22-project-Wuryannnnn/input/topologicalsort_locations copy.csv
+Please input the dependencies filename:/Users/ligeng/Documents/Project/summer22-project-Wuryannnnn/input/topologicalsort_dependencies copy 2.csv
+*************************Results******************************
+Topological Sorting Results:
+McDonalds
+Five Guys
+Starbucks 1
+Bank of America
+Crosswalk
+**************************************************************
+Time taken by function: 0 ms
+```
+
+
+Time complexity: O(n)
 
 All the images are under img file.
 <p align="center"><img src="img/TopologicalSort.png" alt="TSP" width="500"/></p>
@@ -659,6 +836,123 @@ The distance of the path is:7.94756 miles
 You could find your animation at src/lib/output_2opt.avi.     
 Time taken by function: 0 ms
 ```
+
+
+Example 1:
+```shell
+**************************************************************
+* 9. Traveling salesman problem                              
+**************************************************************
+
+In this task, we will select N random points on the map and you need to find the path to travel these points and back to the start point.
+
+Please input the number of the places:4
+"6805079910","7811315761","8229872873","8460176047",
+Calculating ...
+*************************Results******************************
+TravelingTrojan_Brute_force
+"6805079910","8229872873","8460176047","7811315761","6805079910",
+The distance of the path is:7.51413 miles
+**************************************************************
+You could find your animation at src/lib/output0.avi.          
+Time taken by function: 0 ms
+
+Calculating ...
+*************************Results******************************
+TravelingTrojan_Backtracking
+"6805079910","8229872873","8460176047","7811315761","6805079910",
+The distance of the path is:7.51413 miles
+**************************************************************
+You could find your animation at src/lib/output0_backtracking.avi.
+Time taken by function: 0 ms
+
+Calculating ...
+*************************Results******************************
+TravelingTrojan_2opt
+"6805079910","8229872873","7811315761","8460176047","6805079910",
+The distance of the path is:7.66219 miles
+**************************************************************
+You could find your animation at src/lib/output0_2opt.avi.     
+Time taken by function: 0 ms
+```
+
+Example 2:
+```shell 
+**************************************************************
+* 9. Traveling salesman problem                              
+**************************************************************
+
+In this task, we will select N random points on the map and you need to find the path to travel these points and back to the start point.
+
+Please input the number of the places:5
+"4258992604","123176262","1855166304","9308342383","1613487047",
+Calculating ...
+*************************Results******************************
+TravelingTrojan_Brute_force
+"4258992604","123176262","1613487047","9308342383","1855166304","4258992604",
+The distance of the path is:5.62532 miles
+**************************************************************
+You could find your animation at src/lib/output0.avi.          
+Time taken by function: 0 ms
+
+Calculating ...
+*************************Results******************************
+TravelingTrojan_Backtracking
+"4258992604","123176262","1613487047","9308342383","1855166304","4258992604",
+The distance of the path is:5.62532 miles
+**************************************************************
+You could find your animation at src/lib/output0_backtracking.avi.
+Time taken by function: 1 ms
+
+Calculating ...
+*************************Results******************************
+TravelingTrojan_2opt
+"4258992604","123176262","1613487047","9308342383","1855166304","4258992604",
+The distance of the path is:5.62532 miles
+**************************************************************
+You could find your animation at src/lib/output0_2opt.avi.     
+Time taken by function: 1 ms
+```
+
+
+Example 3:
+```shell
+**************************************************************
+* 9. Traveling salesman problem                              
+**************************************************************
+
+In this task, we will select N random points on the map and you need to find the path to travel these points and back to the start point.
+
+Please input the number of the places:11
+"2871078031","8386719086","5396460275","1855169989","6816193734","123182737","6815190436","4037559775","8796829406","932417420","7197941282",
+Calculating ...
+*************************Results******************************
+TravelingTrojan_Brute_force
+"2871078031","6816193734","123182737","4037559775","5396460275","8796829406","6815190436","8386719086","1855169989","932417420","7197941282","2871078031",
+The distance of the path is:9.51184 miles
+**************************************************************
+You could find your animation at src/lib/output0.avi.          
+Time taken by function: 188023 ms
+
+Calculating ...
+*************************Results******************************
+TravelingTrojan_Backtracking
+"2871078031","6816193734","123182737","4037559775","5396460275","8796829406","6815190436","8386719086","1855169989","932417420","7197941282","2871078031",
+The distance of the path is:9.51184 miles
+**************************************************************
+You could find your animation at src/lib/output0_backtracking.avi.
+Time taken by function: 43937 ms
+
+Calculating ...
+*************************Results******************************
+TravelingTrojan_2opt
+"2871078031","6816193734","123182737","4037559775","5396460275","8796829406","6815190436","8386719086","1855169989","932417420","7197941282","2871078031",
+The distance of the path is:9.51184 miles
+**************************************************************
+You could find your animation at src/lib/output0_2opt.avi.     
+Time taken by function: 6 ms
+```
+
 
 <p align="center"><img src="img/TSP.png" alt="TSP" width="500"/></p>
 
@@ -765,6 +1059,8 @@ Find Nearby Results:
 Time taken by function: 37 ms
 ```
 All the images are under img file.
+
+Time complexity: O(n)
 
 <p align="center"><img src="img/Nearby.png" alt="Nearby" width="500"/></p>
 
