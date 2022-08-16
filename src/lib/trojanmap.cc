@@ -160,9 +160,6 @@ std::vector<std::string> TrojanMap::Autocomplete(std::string name) {
   std::vector<std::string> results;
   std::unordered_map<std::string, Node>::iterator iter;
   for (iter = data.begin(); iter != data.end(); ++iter){
-    // if (boost::starts_with(boost::algorithm::to_lower_copy(iter->second.name), boost::algorithm::to_lower_copy(name))){
-    //   results.push_back(iter->second.name);
-    // }
     std::string str = iter -> second.name;
     transform(str.begin(), str.end(), str.begin(), tolower);
     transform(name.begin(), name.end(), name.begin(), tolower);
@@ -632,7 +629,7 @@ std::vector<std::string> TrojanMap::ReadLocationsFromCSVFile(
   std::string lineStr;
   if(inFile.fail()) std::cout << "fail to read the location file." << std::endl;
   while(getline(inFile, lineStr)){
-    std::cout << lineStr << std::endl;
+    // std::cout << lineStr << std::endl;
     std::stringstream ss(lineStr);
     std::string str;
     // std::vector <std::string> lineArray;
@@ -641,6 +638,7 @@ std::vector<std::string> TrojanMap::ReadLocationsFromCSVFile(
     }
     
   }
+  location_names_from_csv.erase(location_names_from_csv.begin());
   return location_names_from_csv;
 }
 
@@ -660,7 +658,7 @@ std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(
   std::string lineStr;
   if(fin.fail()) std::cout << "fail to read the dependency file." << std::endl;
   while(getline(fin, lineStr)){
-    std::cout << lineStr << std::endl;
+    // std::cout << lineStr << std::endl;
     std::stringstream ss(lineStr);
     std::string str;
     std::vector <std::string> lineArray;
@@ -669,7 +667,7 @@ std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(
     }
   dependencies_from_csv.push_back(lineArray);
   }
-
+  dependencies_from_csv.erase(dependencies_from_csv.begin());
   return dependencies_from_csv;
 }
 
@@ -711,14 +709,16 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(
       while (!q.empty()){
         std::string s1 = q.top().second;
         q.pop();
-        result.push_back(s1);
+        if (std::find(result.begin(), result.end(), s1) == result.end()){
+          result.push_back(s1);
+        }
         visited[s1] = 1;
         for (auto n:dependencies){
           for (std::vector<std::string>::iterator iter2 = n.begin(); iter2 != n.end(); ++iter2){
             if (s1.compare(*iter2) == 0){
               if (iter2 + 1 != n.end()){
                 indegree[*(iter2 + 1)] --;
-                std::cout << *iter2 << std::endl;
+                // std::cout << *iter2 << std::endl;
               }
             }
           }

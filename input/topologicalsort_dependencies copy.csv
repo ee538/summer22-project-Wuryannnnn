@@ -1,0 +1,8 @@
+Source, Destination
+Ralphs,Chick-fil-A
+KFC,Ralphs
+Chick-fil-A,KFC
+KFC,Target
+Target,Burger King
+Burger King,Food 4 Less
+Food 4 Less,CVS Pharmacy
