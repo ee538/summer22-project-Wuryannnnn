@@ -73,7 +73,7 @@ TEST(TrojanMapTest, FindPosition)
   std::pair<double, double> gt3(34.0257016, -118.2843512); // groundtruth for "Target"
   EXPECT_EQ(position, gt3);
   // Test Unknown
-  position = m.GetPosition("XXX");
+  position = m.GetPosition("SBB");
   std::pair<double, double> gt4(-1, -1);
   EXPECT_EQ(position, gt4);
 }
@@ -158,24 +158,24 @@ TEST(TrojanMapTest, CalculateShortestPath_Dijkstra2)
 {
   TrojanMap m;
 
-  // Test from Ralphs to Target
-  auto path = m.CalculateShortestPath_Dijkstra("Ralphs", "Target");
+  // Test from CAVA to Ralphs
+  auto path = m.CalculateShortestPath_Dijkstra("CAVA", "Ralphs");
   std::vector<std::string> gt{
-      "2578244375", "4380040154", "4380040158", "4380040167", "6805802087", "8410938469",
-      "6813416131", "7645318201", "6813416130", "6813416129", "123318563", "452688940",
-      "6816193777", "123408705", "6816193774", "452688933", "452688931", "123230412",
-      "6816193770", "6787470576", "4015442011", "6816193692", "6816193693", "6816193694",
-      "4015377691", "544693739", "6816193696", "6804883323", "6807937309", "6807937306",
-      "6816193698", "4015377690", "4015377689", "122814447", "6813416159", "6813405266",
-      "4015372488", "4015372487", "6813405229", "122719216", "6813405232", "4015372486",
-      "7071032399", "4015372485", "6813379479", "6813379584", "6814769289", "5237417650"}; // Expected path
+      "5237417654","6814820016","6814820012","6814820017","6813379416","6814820008","6047198312",
+      "6814820015","9591449515","6813379419","6047234443","6813379418","6045054380","6813379385",
+      "6813379474","6813379475","6818390144","6818390145","6813405201","6813405202","6813405203",
+      "6813405204","6813405205","6813405206","123318572","5565967545","7811699597","6817230310",
+      "3642819026","6817230316","2613117861","6818390170","6818390171","6818390172","6807374562",
+      "2613117885","6818390165","2613117882","6818390178","2613117902","6813416153","6813416154",
+      "6813416145","7232024780","6818427916","6818427917","6818427898","6818427892","6818427918",
+      "6818427919","6818427920","4380040148","4380040152","4380040153","4380040154","2578244375"}; // Expected path
   // Print the path lengths
   std::cout << "My path length: " << m.CalculatePathLength(path) << "miles" << std::endl;
   std::cout << "GT path length: " << m.CalculatePathLength(gt) << "miles" << std::endl;
   EXPECT_EQ(path, gt);
 
-  // Reverse the input from Ralphs to Target
-  path = m.CalculateShortestPath_Dijkstra("Target", "Ralphs");
+  // Reverse the input from CAVA to Ralphs
+  path = m.CalculateShortestPath_Dijkstra("CAVA", "Ralphs");
   std::reverse(gt.begin(), gt.end()); // Reverse the path
 
   // Print the path lengths
@@ -255,24 +255,24 @@ TEST(TrojanMapTest, CalculateShortestPath_Bellman_Ford2)
 {
   TrojanMap m;
 
-  // Test from Ralphs to Target
-  auto path = m.CalculateShortestPath_Bellman_Ford("Ralphs", "Target");
+  // Test from CAVA to Ralphs
+  auto path = m.CalculateShortestPath_Bellman_Ford("CAVA", "Ralphs");
   std::vector<std::string> gt{
-      "2578244375", "4380040154", "4380040158", "4380040167", "6805802087", "8410938469",
-      "6813416131", "7645318201", "6813416130", "6813416129", "123318563", "452688940",
-      "6816193777", "123408705", "6816193774", "452688933", "452688931", "123230412",
-      "6816193770", "6787470576", "4015442011", "6816193692", "6816193693", "6816193694",
-      "4015377691", "544693739", "6816193696", "6804883323", "6807937309", "6807937306",
-      "6816193698", "4015377690", "4015377689", "122814447", "6813416159", "6813405266",
-      "4015372488", "4015372487", "6813405229", "122719216", "6813405232", "4015372486",
-      "7071032399", "4015372485", "6813379479", "6813379584", "6814769289", "5237417650"}; // Expected path
+      "5237417654","6814820016","6814820012","6814820017","6813379416","6814820008","6047198312",
+      "6814820015","9591449515","6813379419","6047234443","6813379418","6045054380","6813379385",
+      "6813379474","6813379475","6818390144","6818390145","6813405201","6813405202","6813405203",
+      "6813405204","6813405205","6813405206","123318572","5565967545","7811699597","6817230310",
+      "3642819026","6817230316","2613117861","6818390170","6818390171","6818390172","6807374562",
+      "2613117885","6818390165","2613117882","6818390178","2613117902","6813416153","6813416154",
+      "6813416145","7232024780","6818427916","6818427917","6818427898","6818427892","6818427918",
+      "6818427919","6818427920","4380040148","4380040152","4380040153","4380040154","2578244375"}; // Expected path
   // Print the path lengths
   std::cout << "My path length: " << m.CalculatePathLength(path) << "miles" << std::endl;
   std::cout << "GT path length: " << m.CalculatePathLength(gt) << "miles" << std::endl;
   EXPECT_EQ(path, gt);
 
-  // Reverse the input from Ralphs to Target
-  path = m.CalculateShortestPath_Bellman_Ford("Target", "Ralphs");
+  // Reverse the input from CAVA to Ralphs
+  path = m.CalculateShortestPath_Bellman_Ford("CAVA", "Ralphs");
   std::reverse(gt.begin(), gt.end()); // Reverse the path
 
   // Print the path lengths
@@ -352,16 +352,16 @@ TEST(TrojanMapTest, CycleDetection)
   EXPECT_EQ(result1, true);
 
   // Test case 2
-  std::vector<double> square2 = {-118.294, -118.265, 34.031, 34.012};
+  std::vector<double> square2 = {-118.293, -118.275, 34.028, 34.022};
   auto sub2 = m.GetSubgraph(square2);
   bool result2 = m.CycleDetection(sub2, square2);
   EXPECT_EQ(result2, true);
 
   // Test case 3
-  std::vector<double> square3 = {-118.290, -118.289, 34.030, 34.020};
+  std::vector<double> square3 = {-118.292, -118.279, 34.020, 34.014};
   auto sub3 = m.GetSubgraph(square3);
   bool result3 = m.CycleDetection(sub3, square3);
-  EXPECT_EQ(result3, false);
+  EXPECT_EQ(result3, true);
 
 }
 
